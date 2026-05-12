@@ -1,3 +1,18 @@
+# Agent Helper
+environmental-intelligence-agent-prompt.md
+AI_CONTEXT.md
+CURRENT_TASK.md
+notes.md
+
+# Node
+node_modules/
+dist/
+.next/
+
+# Docker volumes / local data
+pgdata/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
