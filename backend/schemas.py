@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List
+from datetime import datetime
 
 
 class MessageIn(BaseModel):
@@ -22,6 +23,24 @@ class MessageOut(BaseModel):
     role: str
     content: str
     tags: List[str] = []
+
+    class Config:
+        from_attributes = True
+
+
+class CO2ReadingBase(BaseModel):
+    date: datetime
+    ppm: float
+    source: str
+
+
+class CO2ReadingCreate(CO2ReadingBase):
+    pass
+
+
+class CO2ReadingOut(CO2ReadingBase):
+    id: int
+    created_at: datetime
 
     class Config:
         from_attributes = True

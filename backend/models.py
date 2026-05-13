@@ -1,4 +1,4 @@
-import uuid
+import uuid # 
 from sqlalchemy import Column, String, Text, Integer, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -36,3 +36,13 @@ class TopicTag(Base):
     tag = Column(String(20))
 
     message = relationship("Message", back_populates="tags")
+
+
+class CO2Reading(Base):
+    __tablename__ = "co2_readings"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(DateTime(timezone=True))
+    ppm = Column(String(50))  # Usually a float or string decimal
+    source = Column(String(100))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
