@@ -44,3 +44,25 @@ class CO2ReadingOut(CO2ReadingBase):
 
     class Config:
         from_attributes = True
+
+
+class EPAWaterViolationBase(BaseModel):
+    county_name: str
+    facility_name: str
+    source_id: str
+    street: str
+    city: str
+    state: str
+    penalties: int
+
+
+class EPAWaterViolationCreate(EPAWaterViolationBase):
+    pass
+
+
+class EPAWaterViolationOut(EPAWaterViolationBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

@@ -1,94 +1,85 @@
 # EnviroLens
 
-An agentic environmental intelligence chatbot that connects real-world events, climate science, and policy in a single sourced answer. Ask about wildfires, CO2 levels, or climate legislation — the agent searches for current information and reasons across all three layers to give you a comprehensive response.
+EnviroLens is a full-stack agentic platform designed to make environmental compliance accessible and actionable. Actively under development, the platform replaces traditional conversational AI with a structured form-to-report pipeline. An intelligent agent reasons across multi-source environmental risk data—including water, air quality, soil, and regulatory policy—to generate auditable, county-level risk reports with human-in-the-loop review gates for high-stakes projects.
 
 
 ---
 
-## Tech Stack
+##  Use Cases
 
-| Layer | Technology |
-|----|----|
-| Frontend | React 18 + TypeScript + Vite |
-| Backend | FastAPI (Python 3.12) |
-| AI Agent | LangChain + Claude (Anthropic) |
-| Search Tool | Tavily API |
-| Database | PostgreSQL + pgvector |
-| Dev Environment | Docker Compose |
+* **Primary User (Construction Developer):** Enters project details (type, location, size, cost) via a web form and receives a comprehensive, structured environmental risk report before breaking ground. There is no chatbot—just clean input and actionable, structured output.
+* **Secondary User (Environmental Insurance Underwriter):** Evaluates construction applications using the platform's defensible risk scores to justify premium adjustments, leveraging the same underlying data and agentic reasoning with adjusted framing.
 
 
 ---
 
-## Architecture
+##  Key Features
 
-```
-React Frontend (TypeScript)
-        ↓  POST /chat
-FastAPI Backend
-        ↓
-LangChain AgentExecutor
-    ├── Claude claude-haiku-4-5 (reasoning)
-    └── Tavily Search (live web data)
-        ↓
-PostgreSQL (chat_sessions, messages, topic_tags)
-```
+* **Real-Data Reasoning:** The agent dynamically reasons across real-time data sources; it does not rely on hardcoded logic or static LLM knowledge.
+* **Modular Data Ingestion:** The architecture is designed to accept data modules plug-and-play. **Water risk** is the first active module, with Air, Soil, and Regulatory Policy pipelines planned.
+* **Auditable Confidence Scores:** Every generated report includes a confidence score based on data freshness, full source attribution, and a verifiable audit trail.
+* **Human-in-the-Loop (HIL) Review Gates:** High-stakes reports (e.g., risk scores 8+, protected zones, large-scale projects) are automatically routed through LangGraph to a human review queue for manual sign-off before delivery.
 
 
 ---
 
-## Local Setup
+##  Tech Stack & Architecture
 
-**Prerequisites:** Docker Desktop, Git
+The platform leverages a modern, event-driven agentic stack containerized with Docker:
+
+* **Frontend:** React 18, TypeScript, Vite (Project form, Risk report display, Reviewer dashboard)
+* **Backend:** FastAPI (Web server, form handlers) + APScheduler (Data collection triggers)
+* **Database:** PostgreSQL (Single source of truth for all data)
+* **AI & Agent Layer:**
+  * **LangGraph:** Agent loop, branching, human review gates
+  * **LangChain:** Prompt formatting, structured output parsing
+  * **Claude / GPT-4o:** Core LLM reasoning across data endpoints
+* **Tooling:** FastMCP (Custom MCP server exposing all data tools to the agent)
+* **Data Sources (Water Module):**
+  * EPA Waters API (watersheds, wetlands)
+  * EPA ECHO API (violation history)
+  * FEMA Flood Map API (flood zone classifications)
+  * USGS Water Services (stream flow, water quality)
+  * NOAA API (rainfall trends)
+  * DuckDuckGo Search (web confirmation layer)
+
+
+---
+
+##  Local Setup
+
+**Prerequisites:** Docker Desktop
 
 ```bash
 git clone <repo-url>
 cd env-intel-agent
 ```
 
-Copy and fill in your API keys:
+Copy and configure your environment variables:
 
 ```bash
 cp .env.example .env
-# Add ANTHROPIC_API_KEY and TAVILY_API_KEY to .env
+# Add required API keys to .env
 ```
 
-Start everything:
+Start the platform via GitHub CI or locally:
 
 ```bash
 docker compose up --build
 ```
 
-* UI → http://localhost:3000
-* API docs → http://localhost:8000/docs
-* Health check → http://localhost:8000/health
+* **UI:** `http://localhost:3000`
+* **API Docs:** `http://localhost:8000/docs`
+* **Health Check:** `http://localhost:8000/health`
 
 
 ---
 
-## Running Tests
+##  Testing
 
 ```bash
+# Run backend tests inside the container
 docker compose exec backend pytest tests/ -v
 ```
-
-
----
-
-## Example Queries
-
-* *"What are the most recent wildfires burning in the US?"*
-* *"What are current CO2 levels and what does the science say?"*
-* *"What new climate legislation passed in the EU this year?"*
-* *"How are Amazon deforestation rates connected to global temperature rise?"*
-
-
----
-
-## v2 Roadmap
-
-* Custom MCP server wrapping NOAA, EPA, and Global Carbon Project APIs
-* pgvector RAG pipeline over IPCC reports and EPA rulings
-* Trending topics panel from aggregated query tags
-* Event timeline view: event → science → legislation arc
 
 

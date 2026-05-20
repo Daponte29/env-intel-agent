@@ -8,6 +8,9 @@
   --text-muted: #4a5568;
   --accent: #3b82f6;
   --accent-hover: #2563eb;
+  --alert-red: #ef4444;
+  --alert-yellow: #f59e0b;
+  --alert-green: #10b981;
 
   --tag-event: #ef4444;
   --tag-science: #10b981;
@@ -36,7 +39,67 @@ body {
   height: 100vh;
 }
 
+/* Header Image Styles */
+.header-image-container {
+  width: 100%;
+  height: 180px;  /* Adjust this up or down for a taller/shorter banner */
+  overflow: hidden;
+  position: relative;
+}
+
+.header-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center; /* keep the interesting part centered */
+  filter: brightness(0.7); /* dims it slightly so the white text still pops */
+  transition: filter 0.3s ease;
+}
+
+.header-image:hover {
+  filter: brightness(0.9); /* brightens when mouse hovers over it */
+}
+
+/* Form Styles */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+  background-color: var(--text-muted);
+  cursor: not-allowed;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+

@@ -1,0 +1,9 @@
+### EPA ECHO Clean Water Act (CWA) Facility Search
+### Phase 1: get_facilities gives us aggregate stats and a "QueryID".
+GET https://echodata.epa.gov/echo/cwa_rest_services.get_facilities?output=JSON&p_st=TX&p_co=Harris
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+
+### Phase 2: get_download uses that QueryID
+### The download endpoint ONLY supports CSV or GEOJSOND. We will use GEOJSOND which is basically JSON!
+GET https://echodata.epa.gov/echo/cwa_rest_services.get_download?output=CSV&qid=986
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36

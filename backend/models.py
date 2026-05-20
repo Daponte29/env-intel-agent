@@ -46,3 +46,18 @@ class CO2Reading(Base):
     ppm = Column(String(50))  # Usually a float or string decimal
     source = Column(String(100))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class EPAWaterViolation(Base):
+    __tablename__ = "epa_water_violations"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    county_name = Column(String(100))
+    facility_name = Column(String(255))
+    source_id = Column(String(100), unique=True)
+    street = Column(String(255))
+    city = Column(String(100))
+    state = Column(String(20))
+    penalties = Column(Integer)  # Total penalties figure
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
