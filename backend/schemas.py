@@ -1,7 +1,16 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Literal
 from datetime import datetime
 
+
+class Headline(BaseModel):
+    id: int
+    location: str
+    text: str
+    status: Literal['red', 'yellow', 'green']
+
+class HeadlinesResponse(BaseModel):
+    headlines: List[Headline]
 
 class MessageIn(BaseModel):
     role: str

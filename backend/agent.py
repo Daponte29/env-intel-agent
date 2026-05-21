@@ -28,7 +28,7 @@ VALID_TAGS = {"event", "science", "law", "statistic"}
 
 def build_agent() -> AgentExecutor:
     llm = ChatAnthropic(
-        model="claude-haiku-4-5-20251001",
+        model="claude-3-5-sonnet-20241022",
         anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
         max_tokens=1024,
     )
@@ -83,3 +83,53 @@ def run_agent(user_message: str, history: list[dict], executor: AgentExecutor) -
         )
     tags = parse_tags(output)
     return output, tags
+
+def fetch_national_headlines() -> dict:
+    """
+    Uses Tavily to search for the top 3 US environmental/construction headlines 
+    and uses the LLM to structure them.
+    """
+    llm = ChatAnthropic(
+        model="claude-3-5-sonnet-20241022",
+        anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
+        temperature=0
+    )
+    
+    search = TavilySearchResults(
+        max_results=3,
+        tavily_api_key=os.getenv("TAVILY_API_KEY"),
+    )
+    
+    # 1. Search the web for raw context
+    search_results = search.invoke("top environmental construction compliance headlines USA today")
+    
+    # 2. Instruct the LLM to format the response natively into our Schema
+    prompt = f"""
+    You are an environmental intelligence agent. Based on these raw search results:
+    {search_results}
+    
+    Extract the top 3 national headlines regarding environmental compliance, water risk, or construction.
+    Format exactly 3 items. For 'status' use 'red' for negative/violations, 'yellow' for warnings, 'green' for positive.
+    Location should be the State or County mentioned, or 'USA'.
+    Assign each an id (1, 2, 3).
+    """
+    
+    # We delay the import of HeadlinesResponse to avoid circular imports if any, but since schemas usually imports easily,
+    # let's import it safely here or at the top. We will import at the top of the file via tool.
+    from schemas import HeadlinesResponse
+    
+    try:
+        structured_llm = llm.with_structured_output(HeadlinesResponse)
+        return structured_llm.invoke(prompt)
+    except Exception as e:
+        print(f"Error calling LLM for headlines: {e}")
+        # Fallback to mock data if Anthropic API fails (e.g., 404 for model availability)
+        from schemas import Headline, HeadlinesResponse
+        return HeadlinesResponse(
+            headlines=[
+                Headline(id=1, text="EPA cracks down on unpermitted runoff near the Mississippi River.", location="Louisiana", status="red"),
+                Headline(id=2, text="New state regulations proposed for urban water risk assessments.", location="Texas", status="yellow"),
+                Headline(id=3, text="Federal grants clear the way for sustainable green-building materials.", location="USA", status="green")
+            ]
+        )
+

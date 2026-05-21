@@ -16,8 +16,27 @@ export default function Login() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'var(--bg-base)' }}>
-      <div style={{ width: '400px', backgroundColor: 'var(--bg-surface)', padding: '40px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+    <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      minHeight: '100vh',
+      width: '100%',
+      backgroundColor: 'var(--bg-base)',
+      backgroundImage: 'url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
+      <div style={{ 
+        width: '400px', 
+        backgroundColor: 'var(--bg-surface)', 
+        padding: '40px', 
+        borderRadius: '12px', 
+        border: '1px solid var(--border)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', gap: '10px' }}>
           <Shield size={32} color="var(--accent)" />
           <h1 style={{ fontSize: '24px', fontWeight: 600 }}>EnviroLens</h1>

@@ -8,7 +8,7 @@ from db import engine, get_db, Base
 import models
 import memory
 import agent as agent_module
-from schemas import ChatRequest, ChatResponse
+from schemas import ChatRequest, ChatResponse, HeadlinesResponse
 
 load_dotenv()
 
@@ -18,7 +18,7 @@ app = FastAPI(title="Environmental Intelligence Agent")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,6 +31,13 @@ agent_executor = agent_module.build_agent()
 def health():
     return {"status": "ok"}
 
+@app.get("/api/headlines", response_model=HeadlinesResponse)
+def get_headlines():
+    try:
+        data = agent_module.fetch_national_headlines()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest, db: Session = Depends(get_db)):

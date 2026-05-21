@@ -29,3 +29,19 @@ export async function fetchSessionMessages(sessionId: string): Promise<Message[]
   if (!res.ok) throw new Error('Failed to fetch messages')
   return res.json() as Promise<Message[]>
 }
+
+export interface Headline {
+  id: number;
+  location: string;
+  text: string;
+  status: 'red' | 'yellow' | 'green';
+}
+
+export async function getHeadlines(): Promise<{ headlines: Headline[] }> {
+  // Use VITE_API_URL or fallback correctly
+  const endpoint = API_URL ? `${API_URL}/api/headlines` : 'http://localhost:8000/api/headlines';
+  const res = await fetch(endpoint);
+  if (!res.ok) throw new Error('Failed to fetch headlines');
+  return res.json() as Promise<{ headlines: Headline[] }>;
+}
+

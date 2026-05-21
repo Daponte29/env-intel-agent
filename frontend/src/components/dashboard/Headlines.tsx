@@ -1,28 +1,38 @@
-import React from 'react';
-import { AlertCircle, AlertTriangle, CheckCircle2 } from 'lucide-react';
-
-const headlines = [
-  {
-    id: 1,
-    location: 'Cherokee County GA',
-    text: 'Watershed proximity alerts up 34% this quarter',
-    status: 'red',
-  },
-  {
-    id: 2,
-    location: 'Harris County TX',
-    text: '3 new stormwater violations issued this month',
-    status: 'yellow',
-  },
-  {
-    id: 3,
-    location: 'Travis County TX',
-    text: 'Water quality improving for third consecutive month',
-    status: 'green',
-  }
-];
+import React, { useEffect, useState } from 'react';
+import { AlertCircle, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
+import { getHeadlines, Headline } from '../../api';
 
 export default function Headlines() {
+  const [headlines, setHeadlines] = useState<Headline[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLiveHeadlines() {
+      try {
+        const data = await getHeadlines();
+        setHeadlines(data.headlines);
+      } catch (err) {
+        console.error('Failed to grab headlines:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLiveHeadlines();
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Live Environmental Intelligence
+        </h2>
+        <div style={{ display: 'flex', gap: '16px', padding: '32px', justifyContent: 'center' }}>
+          <Loader2 className="animate-spin" size={32} color="var(--accent)" style={{ animation: 'spin 1s linear infinite' }} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ marginBottom: '32px' }}>
       <h2 style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -76,3 +86,4 @@ export default function Headlines() {
     </div>
   );
 }
+

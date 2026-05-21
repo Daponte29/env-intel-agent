@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Headlines from '../components/dashboard/Headlines';
 import RiskForm from '../components/dashboard/RiskForm';
 import LoadingSteps from '../components/dashboard/LoadingSteps';
-import { FileText } from 'lucide-react';
+import { FileText, LogOut } from 'lucide-react';
 
 export default function Dashboard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const navigate = useNavigate();
 
   const handleFormSubmit = () => {
     setIsSubmitting(true);
@@ -42,7 +44,26 @@ export default function Dashboard() {
           </div>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <button 
+            onClick={() => navigate('/login')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '14px',
+              transition: 'color 0.2s ease'
+            }}
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
+          
           <div style={{ 
             width: '36px', height: '36px', 
             borderRadius: '50%', backgroundColor: 'var(--accent)', 
